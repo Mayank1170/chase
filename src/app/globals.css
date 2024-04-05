@@ -18,16 +18,40 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+  background-color: #151517;
+  verflow: hidden;
+} 
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+
+.BottomToTop1{
+  animation: BottomToTop1 4s infinite linear;
+}
+
+@keyframes BottomToTop1{
+  from{
+    transform: translateY(100%);
+  }
+to{
+  transform: translateY(-100%);
+}
+}
+
+
+.BottomToTop2{
+  animation: BottomToTop2 4s infinite linear;
+}
+
+@keyframes BottomToTop2{
+  from{
+    transform: translateX(100%);
+  }
+to{
+  transform: translateX(-100%);
+}
 }
