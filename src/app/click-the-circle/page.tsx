@@ -7,13 +7,30 @@ const Circle = () => {
   const [circleClicked, setCircleClicked] = useState(0);
   const [totalClicked, setTotalClicked] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
+  const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
+  
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    updateScreenSize();
+    window.addEventListener("resize", updateScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", updateScreenSize);
+    };
+  }, []);
+
   const position = useRef({
-    top: Math.floor(Math.random() * (screenHeight - radius * 2)),
-    left: Math.floor(Math.random() * (screenWidth - radius * 2)),
+    top: Math.floor(Math.random() * (screenSize.height - radius * 2)),
+    left: Math.floor(Math.random() * (screenSize.width - radius * 2)),
     transform: "translate(-50%, -50%)",
   });
+
   const clicked = () => {
     setCircleClicked((prevCount) => {
       console.log("outside: ", circleClicked);
@@ -26,11 +43,12 @@ const Circle = () => {
     console.log("Total click:", totalClicked);
   };
 
-  const accuracy = (circleClicked / totalClicked) * 100;
+  const accuracy = totalClicked > 0 ? (circleClicked / totalClicked) * 100 : 0;
 
   const circleClickedFunc = () => {
     setRadius(0);
   };
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (timeLeft > 0) {
@@ -63,16 +81,16 @@ const Circle = () => {
   }, []);
 
   useEffect(() => {
-    if (radius == 0) {
-      const newTop = Math.floor(Math.random() * (screenHeight - radius * 2));
-      const newLeft = Math.floor(Math.random() * (screenWidth - radius * 2));
+    if (radius === 0) {
+      const newTop = Math.floor(Math.random() * (screenSize.height - radius * 2));
+      const newLeft = Math.floor(Math.random() * (screenSize.width - radius * 2));
       position.current = {
         ...position.current,
         top: newTop,
         left: newLeft,
       };
     }
-  }, [increasing, radius, screenHeight, screenWidth]);
+  }, [increasing, radius, screenSize.height, screenSize.width]);
 
   return (
     <>
@@ -84,7 +102,6 @@ const Circle = () => {
             style={position.current}
           >
             <div
-              // onClick={clicked()}
               onClick={circleClickedFunc}
               className="rounded-full bg-blue-500"
               style={{ width: radius, height: radius }}
@@ -94,7 +111,7 @@ const Circle = () => {
       ) : (
         <div className="h-screen w-full flex flex-col justify-center items-center">
           <h1>Time&apos;s up</h1>
-          <h1>Your accuray: {accuracy}</h1>
+          <h1>Your accuracy: {accuracy.toFixed(2)}%</h1>
         </div>
       )}
     </>
