@@ -93,7 +93,7 @@ const Circle = () => {
         </div>
       ) : (
         <div className="h-screen w-full flex flex-col justify-center items-center">
-          <h1>Time's up</h1>
+          <h1>Time&apos;s up</h1>
           <h1>Your accuray: {accuracy}</h1>
         </div>
       )}
